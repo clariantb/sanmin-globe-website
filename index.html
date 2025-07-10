@@ -374,20 +374,45 @@
                         kami melalui informasi di bawah ini.</p>
                 </div>
                 <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-10">
-                    <!-- Kolom Kiri: Info Kontak -->
+                    <!-- Kolom Kiri: Formulir Kontak -->
                     <div class="bg-gray-700 p-8 rounded-lg">
-                        <h3 class="text-2xl font-bold mb-6 text-white">Informasi Kontak</h3>
-                        <div class="space-y-4">
+                        <h3 class="text-2xl font-bold mb-6 text-white">Kirim Pesan</h3>
+                        <form id="contact-form" class="space-y-4">
+                            <div>
+                                <label for="name" class="block mb-2 text-sm font-medium text-gray-300">Nama Lengkap</label>
+                                <input type="text" id="name" name="name" class="w-full px-3 py-2 bg-gray-600 border border-gray-500 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                            </div>
+                            <div>
+                                <label for="email" class="block mb-2 text-sm font-medium text-gray-300">Alamat Email</label>
+                                <input type="email" id="email" name="email" class="w-full px-3 py-2 bg-gray-600 border border-gray-500 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                                <p class="text-xs text-gray-400 mt-1">Pastikan email Anda benar agar kami dapat membalas pesan Anda.</p>
+                            </div>
+                            <div>
+                                <label for="subject" class="block mb-2 text-sm font-medium text-gray-300">Subjek</label>
+                                <input type="text" id="subject" name="subject" class="w-full px-3 py-2 bg-gray-600 border border-gray-500 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                            </div>
+                            <div>
+                                <label for="message" class="block mb-2 text-sm font-medium text-gray-300">Pesan Anda</label>
+                                <textarea id="message" name="message" rows="4" class="w-full px-3 py-2 bg-gray-600 border border-gray-500 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500" required></textarea>
+                            </div>
+                            <button type="submit" class="w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 transition-colors">Kirim Pesan</button>
+                            <div id="form-status" class="mt-4 text-center"></div>
+                        </form>
+                    </div>
+                    <!-- Kolom Kanan: Info & Peta -->
+                    <div class="bg-gray-700 p-8 rounded-lg">
+                        <h3 class="text-2xl font-bold mb-6 text-white">Informasi & Lokasi</h3>
+                        <div class="space-y-4 mb-6">
                             <div>
                                 <h4 class="text-lg font-semibold text-blue-400">Alamat</h4>
                                 <p class="text-gray-300">Blk. G, Ruko Golden Palm No.27, Pegadungan, Kec. Kalideres, Kota Jakarta Barat, Daerah Khusus Ibukota Jakarta 11830</p>
                             </div>
                             <div>
-                                <h3 class="text-xl font-bold mb-2 text-blue-400">Email</h3>
+                                <h4 class="text-lg font-semibold text-blue-400">Email</h4>
                                 <p class="text-gray-300">michael@sanminglobe.com</p>
                             </div>
                             <div>
-                                <h3 class="text-xl font-bold mb-2 text-blue-400">Telepon</h3>
+                                <h4 class="text-lg font-semibold text-blue-400">Telepon</h4>
                                 <p class="text-gray-300">+62 858-9443-6642</p>
                             </div>
                              <div>
@@ -395,18 +420,9 @@
                                 <p class="text-gray-300">Senin - Jumat: 08:00 - 17:00</p>
                             </div>
                         </div>
-                    </div>
-                    <!-- Kolom Kanan: Peta Google Maps -->
-                    <div class="rounded-lg overflow-hidden shadow-lg">
-                        <iframe 
-                            src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3967.0604720465203!2d106.7002894!3d-6.1225638!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69f73f22d31c8f%3A0x4750404a43ed2b13!2sPT.%20SARANA%20MITRA%20INTI%20GLOBAL!5e0!3m2!1sen!2sid!4v1752173672736!5m2!1sen!2sid" 
-                            width="100%" 
-                            height="100%" 
-                            style="border:0;" 
-                            allowfullscreen="" 
-                            loading="lazy" 
-                            referrerpolicy="no-referrer-when-downgrade">
-                        </iframe>
+                        <div class="rounded-lg overflow-hidden shadow-lg h-64">
+                            <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3967.0604720465203!2d106.7002894!3d-6.1225638!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69f73f22d31c8f%3A0x4750404a43ed2b13!2sPT.%20SARANA%20MITRA%20INTI%20GLOBAL!5e0!3m2!1sen!2sid!4v1752173672736!5m2!1sen!2sid" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                        </div>
                     </div>
                 </div>
                 
