@@ -365,6 +365,20 @@
             </div>
         </section>
 
+        <!-- NEW Article Section -->
+        <section id="artikel" class="py-20">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl font-bold text-gray-800 mb-4">Artikel & Informasi</h2>
+                    <p class="text-gray-600 max-w-2xl mx-auto">Baca artikel terbaru kami untuk wawasan mendalam tentang produk dan aplikasi kimia.</p>
+                </div>
+                <div id="article-list" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Artikel akan dimuat di sini oleh JavaScript -->
+                    <p class="text-center col-span-full text-gray-500">Memuat artikel...</p>
+                </div>
+            </div>
+        </section>
+
         <!-- Kontak Section -->
         <section id="kontak" class="bg-gray-800 text-white py-20">
             <div class="container mx-auto px-6">
@@ -437,6 +451,11 @@
             </div>
         </div>
     </div>
+
+    <!-- Floating WhatsApp Button -->
+    <a href="https://wa.me/6285894436642?text=Halo,%20saya%20tertarik%20dengan%20produk%20Anda." target="_blank" class="fixed bottom-6 right-6 bg-green-500 text-white p-4 rounded-full shadow-lg hover:bg-green-600 transition-transform hover:scale-110 z-40">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.894 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 4.315 1.847 6.033l-1.05 3.856 3.897-1.023zm-1.023-7.297c-.147-.272-.282-.281-.401-.283-.117-.002-.252-.002-.37-.002s-.333.043-.502.221c-.17.179-.657.643-.657 1.57.0 1.128.673 1.834.765 1.956.092.122 1.32 2.159 3.216 2.82.433.152.79.242 1.09.308.422.091.787.075 1.087-.023.368-.12.82-.331.925-.625.105-.294.105-.55.075-.625s-.092-.122-.184-.214c-.092-.092-.21-.122-.303-.184-.093-.061-.21-.122-.303-.184-.093-.061-.21-.122-.303-.184s-.184-.092-.277-.153c-.092-.061-.21-.122-.303-.184-.093-.061-.21-.122-.303-.184s-.184-.092-.277-.153c-.092-.061-.21-.122-.303-.184-.093-.061-.21-.122-.303-.184-.093-.061-.21-.122-.303-.184s-.184-.092-.277-.153z"/></svg>
+    </a>
 
     <!-- Supabase and App Logic -->
     <script type="module">
@@ -522,36 +541,81 @@
             });
         }
 
+        async function loadArticlesFromSupabase() {
+            if (!supabase) return;
+            const { data, error } = await supabase.from('articles').select('*').order('created_at', { ascending: false });
+            if (error) {
+                console.error('Error fetching articles:', error);
+                document.getElementById('article-list').innerHTML = '<p class="text-center col-span-full text-red-500">Gagal memuat artikel.</p>';
+                return;
+            }
+            allArticles = data || [];
+            const articleListContainer = document.getElementById('article-list');
+            articleListContainer.innerHTML = ''; // Clear loading text
+            if(allArticles.length === 0) {
+                articleListContainer.innerHTML = '<p class="text-center col-span-full text-gray-500">Belum ada artikel yang dipublikasikan.</p>';
+                return;
+            }
+            allArticles.forEach(article => {
+                const articleCard = document.createElement('div');
+                articleCard.className = 'article-item bg-white rounded-lg shadow-md overflow-hidden';
+                articleCard.dataset.articleId = article.id;
+                
+                const shortContent = article.content ? article.content.split(' ').slice(0, 20).join(' ') + '...' : '';
+
+                articleCard.innerHTML = `
+                    <img src="${article.featured_image_url || 'https://placehold.co/600x400/e2e8f0/475569?text=Artikel'}" alt="[Gambar] ${article.title}" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2 text-gray-800">${article.title}</h3>
+                        <p class="text-gray-600 mb-4">${shortContent}</p>
+                        <span class="text-blue-600 font-semibold hover:underline">Baca Selengkapnya &rarr;</span>
+                    </div>
+                `;
+                articleListContainer.appendChild(articleCard);
+            });
+        }
+
         function openProductModal(productId) {
             const product = allProducts.find(p => p.id == productId);
             if (!product) return;
-
             const modal = document.getElementById('product-modal');
-            const modalName = document.getElementById('modal-product-name');
-            const modalImage = document.getElementById('modal-product-image');
-            const modalDescription = document.getElementById('modal-product-description');
-
-            modalName.textContent = product.name;
-            modalDescription.innerHTML = product.description ? product.description : '<p>Tidak ada deskripsi untuk produk ini.</p>';
-
+            modal.querySelector('#modal-product-name').textContent = product.name;
+            modal.querySelector('#modal-product-description').innerHTML = product.description ? product.description : '<p>Tidak ada deskripsi.</p>';
+            const img = modal.querySelector('#modal-product-image');
             if (product.image_url) {
-                modalImage.src = product.image_url;
-                modalImage.classList.remove('hidden');
+                img.src = product.image_url;
+                img.classList.remove('hidden');
             } else {
-                modalImage.classList.add('hidden');
+                img.classList.add('hidden');
             }
-
             modal.classList.remove('hidden');
         }
 
-        function closeProductModal() {
-            document.getElementById('product-modal').classList.add('hidden');
+        function openArticleModal(articleId) {
+            const article = allArticles.find(a => a.id == articleId);
+            if (!article) return;
+            const modal = document.getElementById('article-modal');
+            modal.querySelector('#modal-article-title').textContent = article.title;
+            modal.querySelector('#modal-article-content').innerHTML = article.content ? article.content : '<p>Konten tidak tersedia.</p>';
+            const img = modal.querySelector('#modal-article-image');
+            if (article.featured_image_url) {
+                img.src = article.featured_image_url;
+                img.classList.remove('hidden');
+            } else {
+                img.classList.add('hidden');
+            }
+            modal.classList.remove('hidden');
+        }
+        
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.add('hidden');
         }
 
         document.addEventListener('DOMContentLoaded', () => {
             if (SUPABASE_URL !== 'YOUR_SUPABASE_URL' && SUPABASE_ANON_KEY !== 'YOUR_SUPABASE_ANON_KEY') {
                 supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
                 loadProductsFromSupabase();
+                loadArticlesFromSupabase();
             }
 
             // --- UI Logic ---
@@ -563,12 +627,10 @@
 
             searchInput.addEventListener('input', (e) => {
                 const query = e.target.value.trim().toLowerCase();
-
                 if (query) {
                     tabButtonsContainer.classList.add('hidden');
                     tabContentContainer.classList.add('hidden');
                     searchResultsContainer.classList.remove('hidden');
-
                     const filteredProducts = allProducts.filter(p => p.name.toLowerCase().includes(query));
                     renderProducts(filteredProducts, searchResultsList);
                 } else {
@@ -578,22 +640,22 @@
                 }
             });
 
-            const modal = document.getElementById('product-modal');
-            const modalCloseBtn = document.getElementById('modal-close-btn');
+            // Modal listeners
+            document.getElementById('modal-product-close-btn').addEventListener('click', () => closeModal('product-modal'));
+            document.getElementById('product-modal').addEventListener('click', (e) => { if (e.target.id === 'product-modal') closeModal('product-modal'); });
+            
+            document.getElementById('modal-article-close-btn').addEventListener('click', () => closeModal('article-modal'));
+            document.getElementById('article-modal').addEventListener('click', (e) => { if (e.target.id === 'article-modal') closeModal('article-modal'); });
 
-            modalCloseBtn.addEventListener('click', closeProductModal);
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) {
-                    closeProductModal();
-                }
-            });
-
-            const productDisplayArea = document.getElementById('product-display-area');
-            productDisplayArea.addEventListener('click', (e) => {
+            // Event delegation for opening modals
+            document.body.addEventListener('click', (e) => {
                 const productItem = e.target.closest('.product-item');
                 if (productItem) {
-                    const productId = productItem.dataset.productId;
-                    openProductModal(productId);
+                    openProductModal(productItem.dataset.productId);
+                }
+                const articleItem = e.target.closest('.article-item');
+                if (articleItem) {
+                    openArticleModal(articleItem.dataset.articleId);
                 }
             });
 
@@ -611,22 +673,13 @@
                     document.getElementById(button.dataset.target).classList.add('active');
                 });
             });
-            const heroCategoryLinks = document.querySelectorAll('.hero-category-link');
-            heroCategoryLinks.forEach(link => {
-                link.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    const targetCategory = this.dataset.target;
-                    const targetTabButton = document.querySelector(`.tab-btn[data-target="${targetCategory}"]`);
-                    if (targetTabButton) targetTabButton.click();
-                    document.getElementById('produk').scrollIntoView({ behavior: 'smooth' });
-                });
-            });
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 anchor.addEventListener('click', function (e) {
-                    const targetSection = document.querySelector(this.getAttribute('href'));
-                    if (targetSection && !this.classList.contains('hero-category-link')) {
-                        e.preventDefault();
-                        targetSection.scrollIntoView({ behavior: 'smooth' });
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        targetElement.scrollIntoView({ behavior: 'smooth' });
                     }
                 });
             });
