@@ -13,6 +13,13 @@
         body {
             font-family: 'Inter', sans-serif;
         }
+        .article-card {
+             transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .article-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
         /* Custom styles untuk konten artikel */
         #article-content-main h4 {
             font-weight: 600;
@@ -57,7 +64,7 @@
     <header class="bg-white shadow-md sticky top-0 z-50">
         <nav class="container mx-auto px-6 py-3 flex justify-between items-center">
             <a href="index.html" class="flex items-center">
-                <img src="https://iqbyisyrzrcatqkxoflk.supabase.co/storage/v1/object/sign/logo/logo.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV80MGI4NGQzNS1kZjc4LTRkY2EtOTUzMC03MmE5NTgzMzAyMTQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJsb2dvL2xvZ28ucG5nIiwiaWF0IjoxNzUxNzQzMjEzLCJleHAiOjE3ODMyNzkyMTN9.Od9OQzW7llfp6m4tLv7BELjcKu_m_vbAtFr4JXbJUcM" alt="Logo PT. Sarana Mitra Inti Global" class="h-12 w-auto">
+                <img src="https://iqbyisyrzrcatqkxoflk.supabase.co/storage/v1/object/sign/logo/logo.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV8xNWQ2ZWE1Yy1hNzRkLTRlZDEtYTExNC0zODZkZDk0N2Y4N2EiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJsb2dvL2xvZ28ucG5nIiwiaWF0IjoxNzU0ODQ2MjQwLCJleHAiOjE3ODYzODIyNDB9.Sk6MCzZO90aA42XH5ApYxQ8OQo5fEv27SHsq4eAxdLU" alt="Logo PT. Sarana Mitra Inti Global" class="h-12 w-auto">
             </a>
             <div class="hidden md:flex items-center space-x-6">
                 <a href="index.html#beranda" class="text-gray-600 hover:text-blue-600 transition-colors">Beranda</a>
@@ -92,6 +99,14 @@
                     <a href="index.html#artikel" class="text-blue-600 font-semibold hover:underline">&larr; Kembali ke Daftar Artikel</a>
                 </div>
             </article>
+
+            <!-- Related Articles Section -->
+            <section id="related-articles" class="max-w-4xl mx-auto mt-16 md:mt-24">
+                <h3 class="text-2xl font-bold text-gray-800 mb-6 border-b pb-4">Baca Selanjutnya</h3>
+                <div id="related-articles-list" class="grid md:grid-cols-3 gap-8">
+                    <!-- Related articles will be loaded here -->
+                </div>
+            </section>
         </div>
     </main>
 
@@ -111,6 +126,45 @@
         
         const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+        async function loadRelatedArticles(currentArticleId) {
+            const { data, error } = await supabase
+                .from('articles')
+                .select('*')
+                .not('id', 'eq', currentArticleId) // Exclude the current article
+                .order('created_at', { ascending: false })
+                .limit(3); // Get 3 latest articles
+
+            if (error) {
+                console.error('Error fetching related articles:', error);
+                return;
+            }
+
+            const relatedListContainer = document.getElementById('related-articles-list');
+            relatedListContainer.innerHTML = ''; // Clear any previous content
+
+            if (data && data.length > 0) {
+                data.forEach(article => {
+                    const articleLink = document.createElement('a');
+                    articleLink.href = `artikel.html?slug=${article.slug}`;
+                    articleLink.className = 'article-card bg-white rounded-lg shadow-md overflow-hidden block';
+                    
+                    const tempDiv = document.createElement('div');
+                    tempDiv.innerHTML = article.content || '';
+                    const textContent = tempDiv.textContent || tempDiv.innerText || '';
+                    const shortContent = textContent.split(' ').slice(0, 15).join(' ') + '...';
+
+                    articleLink.innerHTML = `
+                        <img src="${article.featured_image_url || 'https://placehold.co/600x400/e2e8f0/475569?text=Artikel'}" alt="[Gambar] ${article.title}" class="w-full h-40 object-cover">
+                        <div class="p-4">
+                            <h3 class="text-lg font-bold mb-2 text-gray-800">${article.title}</h3>
+                            <p class="text-gray-600 text-sm">${shortContent}</p>
+                        </div>
+                    `;
+                    relatedListContainer.appendChild(articleLink);
+                });
+            }
+        }
+
         async function loadSingleArticle() {
             const params = new URLSearchParams(window.location.search);
             const articleSlug = params.get('slug');
@@ -124,7 +178,7 @@
                 .from('articles')
                 .select('*')
                 .eq('slug', articleSlug)
-                .single(); // Ambil hanya satu data
+                .single();
 
             if (error || !data) {
                 console.error('Error fetching article:', error);
@@ -153,6 +207,9 @@
             }
 
             document.getElementById('article-content-main').innerHTML = data.content;
+
+            // After loading the main article, load related articles
+            loadRelatedArticles(data.id);
         }
 
         document.addEventListener('DOMContentLoaded', () => {
