@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,375 +13,166 @@
             font-family: 'Inter', sans-serif;
             scroll-behavior: smooth;
         }
-
         .tab-btn.active {
-            border-color: #2563eb;
-            /* blue-600 */
+            border-color: #2563eb; /* blue-600 */
             background-color: #2563eb;
             color: white;
         }
-
         .tab-content {
             display: none;
         }
-
         .tab-content.active {
             display: block;
         }
-
         .loading-placeholder::after {
             content: 'Memuat produk...';
             color: #6b7280;
         }
-
         .error-placeholder::after {
             content: 'Gagal memuat produk. Pastikan RLS (Row Level Security) sudah diaktifkan untuk read.';
-            color: #ef4444;
-            /* red-500 */
+            color: #ef4444; /* red-500 */
         }
-
         .empty-placeholder::after {
             content: 'Belum ada produk untuk kategori ini.';
             color: #6b7280;
         }
-
-        /* Style untuk product item yang bisa diklik */
         .product-item {
             cursor: pointer;
             transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
         }
-
         .product-item:hover {
             transform: translateY(-4px);
             box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
         }
-
-        /* [FIX] Custom styles untuk konten di dalam modal deskripsi produk */
+        .article-card {
+             transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .article-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
         #modal-product-description h4 {
             font-weight: 600;
             font-size: 1.1em;
             margin-top: 1.25rem;
-            /* Jarak di atas judul */
             margin-bottom: 0.75rem;
-            /* Jarak di bawah judul (diperkecil) */
         }
-
         #modal-product-description table {
             width: 100%;
             border-collapse: collapse;
             font-size: 0.9em;
         }
-
         #modal-product-description td {
             border: 1px solid #e5e7eb;
             padding: 10px;
         }
-
         #modal-product-description tr:nth-child(even) {
             background-color: #f9fafb;
         }
     </style>
 </head>
-
 <body class="bg-gray-50 text-gray-800">
 
     <!-- Header / Navigation Bar -->
     <header class="bg-white shadow-md sticky top-0 z-50">
-        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
-            <!-- LOGO BARU -->
+        <nav class="container mx-auto px-6 py-3 flex justify-between items-center">
             <a href="#" class="flex items-center">
-                <img src="https://iqbyisyrzrcatqkxoflk.supabase.co/storage/v1/object/sign/logo/logo.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV80MGI4NGQzNS1kZjc4LTRkY2EtOTUzMC03MmE5NTgzMzAyMTQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJsb2dvL2xvZ28ucG5nIiwiaWF0IjoxNzUxNzQzMjEzLCJleHAiOjE3ODMyNzkyMTN9.Od9OQzW7llfp6m4tLv7BELjcKu_m_vbAtFr4JXbJUcM" alt="Logo PT. Sarana Mitra Inti Global" class="h-12 w-auto">
+                <img src="https://iqbyisyrzrcatqkxoflk.supabase.co/storage/v1/object/sign/logo/logo.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV8xNWQ2ZWE1Yy1hNzRkLTRlZDEtYTExNC0zODZkZDk0N2Y4N2EiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJsb2dvL2xvZ28ucG5nIiwiaWF0IjoxNzU0ODQ2MjQwLCJleHAiOjE3ODYzODIyNDB9.Sk6MCzZO90aA42XH5ApYxQ8OQo5fEv27SHsq4eAxdLU" alt="Logo PT. Sarana Mitra Inti Global" class="h-12 w-auto">
             </a>
             <div class="hidden md:flex items-center space-x-6">
                 <a href="#beranda" class="text-gray-600 hover:text-blue-600 transition-colors">Beranda</a>
                 <a href="#tentang" class="text-gray-600 hover:text-blue-600 transition-colors">Tentang Kami</a>
-                <a href="#layanan" class="text-gray-600 hover:text-blue-600 transition-colors">Layanan</a>
                 <a href="#produk" class="text-gray-600 hover:text-blue-600 transition-colors">Produk</a>
+                <a href="#artikel" class="text-gray-600 hover:text-blue-600 transition-colors">Artikel</a>
                 <a href="#kontak" class="text-gray-600 hover:text-blue-600 transition-colors">Kontak</a>
             </div>
-            <a href="#kontak" class="hidden md:block bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
-                Hubungi Kami
-            </a>
+            <a href="#kontak" class="hidden md:block bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">Hubungi Kami</a>
             <button id="mobile-menu-button" class="md:hidden text-gray-700 focus:outline-none">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7">
-                    </path>
-                </svg>
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
             </button>
         </nav>
         <!-- Mobile Menu -->
         <div id="mobile-menu" class="hidden md:hidden bg-white border-t">
             <a href="#beranda" class="block px-6 py-3 text-gray-600 hover:bg-gray-100">Beranda</a>
             <a href="#tentang" class="block px-6 py-3 text-gray-600 hover:bg-gray-100">Tentang Kami</a>
-            <a href="#layanan" class="block px-6 py-3 text-gray-600 hover:bg-gray-100">Layanan</a>
             <a href="#produk" class="block px-6 py-3 text-gray-600 hover:bg-gray-100">Produk</a>
+            <a href="#artikel" class="block px-6 py-3 text-gray-600 hover:bg-gray-100">Artikel</a>
             <a href="#kontak" class="block px-6 py-3 text-gray-600 hover:bg-gray-100">Kontak</a>
         </div>
     </header>
 
     <main>
-        <!-- REVISED Hero Section -->
+        <!-- Sections -->
         <section id="beranda" class="bg-blue-600 py-20">
             <div class="container mx-auto px-6 text-center">
-                <h1 class="text-4xl md:text-5xl font-bold text-white leading-tight mb-4">PT. SARANA MITRA INTI GLOBAL
-                </h1>
+                <h1 class="text-4xl md:text-5xl font-bold text-white leading-tight mb-4">PT. SARANA MITRA INTI GLOBAL</h1>
                 <p class="text-lg text-blue-100 mb-12">Jelajahi Kategori Produk Unggulan Kami</p>
-
                 <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-4 md:gap-6">
-                    <!-- Cards for categories -->
-                    <!-- Card 1: Kosmetik -->
-                    <a href="#produk" class="hero-category-link group" data-target="kosmetik">
-                        <div
-                            class="bg-white p-4 rounded-lg shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 h-full flex flex-col justify-center items-center">
-                            <img src="https://iqbyisyrzrcatqkxoflk.supabase.co/storage/v1/object/sign/categories/premium_photo-1674739375749-7efe56fc8bbb.avif?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV80MGI4NGQzNS1kZjc4LTRkY2EtOTUzMC03MmE5NTgzMzAyMTQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJjYXRlZ29yaWVzL3ByZW1pdW1fcGhvdG8tMTY3NDczOTM3NTc0OS03ZWZlNTZmYzhiYmIuYXZpZiIsImlhdCI6MTc1MTQ0NTkxNiwiZXhwIjoxNzgyOTgxOTE2fQ.LCnUizQnzl0XKLWCPVel3Ax8lkKbtuq0DLWk3wHNa04"
-                                alt="[Gambar Kosmetik]"
-                                class="mx-auto rounded-full h-16 w-16 md:h-20 md:w-20 object-cover mb-3 border-4 border-transparent group-hover:border-blue-500">
-                            <h3 class="font-semibold text-sm md:text-base">Kosmetik</h3>
-                        </div>
-                    </a>
-                    <!-- Card 2: Rumah Tangga -->
-                    <a href="#produk" class="hero-category-link group" data-target="rumahtangga">
-                        <div
-                            class="bg-white p-4 rounded-lg shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 h-full flex flex-col justify-center items-center">
-                            <img src="https://iqbyisyrzrcatqkxoflk.supabase.co/storage/v1/object/sign/categories/premium_photo-1664910556213-4395ebca30c2.avif?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV80MGI4NGQzNS1kZjc4LTRkY2EtOTUzMC03MmE5NTgzMzAyMTQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJjYXRlZ29yaWVzL3ByZW1pdW1fcGhvdG8tMTY2NDkxMDU1NjIxMy00Mzk1ZWJjYTMwYzIuYXZpZiIsImlhdCI6MTc1MTQ0NTg5OSwiZXhwIjoxNzgyOTgxODk5fQ.82KoGs-u-06i9AImDScarqO_v09ztoHDTd5Ti2LXndE"
-                                alt="[Gambar Produk Rumah Tangga]"
-                                class="mx-auto rounded-full h-16 w-16 md:h-20 md:w-20 object-cover mb-3 border-4 border-transparent group-hover:border-green-500">
-                            <h3 class="font-semibold text-sm md:text-base">Rumah Tangga</h3>
-                        </div>
-                    </a>
-                    <!-- Card 3: Kendaraan -->
-                    <a href="#produk" class="hero-category-link group" data-target="kendaraan">
-                        <div
-                            class="bg-white p-4 rounded-lg shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 h-full flex flex-col justify-center items-center">
-                            <img src="https://iqbyisyrzrcatqkxoflk.supabase.co/storage/v1/object/sign/categories/premium_photo-1698080249116-de37e81e568e.avif?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV80MGI4NGQzNS1kZjc4LTRkY2EtOTUzMC03MmE5NTgzMzAyMTQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJjYXRlZ29yaWVzL3ByZW1pdW1fcGhvdG8tMTY5ODA4MDI0OTExNi1kZTM3ZTgxZTU2OGUuYXZpZiIsImlhdCI6MTc1MTQ0NTk1MSwiZXhwIjoxNzgyOTgxOTUxfQ.RGRKa-n7QsHdpIRGollR_1lFLttaxvmONK7TWDPmBAM"
-                                alt="[Gambar Perawatan Kendaraan]"
-                                class="mx-auto rounded-full h-16 w-16 md:h-20 md:w-20 object-cover mb-3 border-4 border-transparent group-hover:border-amber-500">
-                            <h3 class="font-semibold text-sm md:text-base">Kendaraan</h3>
-                        </div>
-                    </a>
-                    <!-- Card 4: Makanan & Minuman -->
-                    <a href="#produk" class="hero-category-link group" data-target="makanan">
-                        <div
-                            class="bg-white p-4 rounded-lg shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 h-full flex flex-col justify-center items-center">
-                            <img src="https://iqbyisyrzrcatqkxoflk.supabase.co/storage/v1/object/sign/categories/photo-1645387492367-80c5841894fb.avif?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV80MGI4NGQzNS1kZjc4LTRkY2EtOTUzMC03MmE5NTgzMzAyMTQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJjYXRlZ29yaWVzL3Bob3RvLTE2NDUzODc0OTIzNjctODBjNTg0MTg5NGZiLmF2aWYiLCJpYXQiOjE3NTE0NDU4NzAsImV4cCI6MTc4Mjk4MTg3MH0.G4IiI8xW4Ju0nookDoRHPIYPZjVj4QIBnHGs3cuhhjE"
-                                alt="[Gambar Makanan & Minuman]"
-                                class="mx-auto rounded-full h-16 w-16 md:h-20 md:w-20 object-cover mb-3 border-4 border-transparent group-hover:border-red-500">
-                            <h3 class="font-semibold text-sm md:text-base">Makanan & Minuman</h3>
-                        </div>
-                    </a>
-                    <!-- Card 5: Cat & Tinta -->
-                    <a href="#produk" class="hero-category-link group" data-target="cat">
-                        <div
-                            class="bg-white p-4 rounded-lg shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 h-full flex flex-col justify-center items-center">
-                            <img src="https://iqbyisyrzrcatqkxoflk.supabase.co/storage/v1/object/sign/categories/premium_photo-1682142455929-cfdbbf6d7f4e.avif?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV80MGI4NGQzNS1kZjc4LTRkY2EtOTUzMC03MmE5NTgzMzAyMTQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJjYXRlZ29yaWVzL3ByZW1pdW1fcGhvdG8tMTY4MjE0MjQ1NTkyOS1jZmRiYmY2ZDdmNGUuYXZpZiIsImlhdCI6MTc1MTQ0NTkzOSwiZXhwIjoxNzgyOTgxOTM5fQ.qkEjuTID9XaFEaxxVujyTLmx2_686_9ShlPLd-8eeak"
-                                alt="[Gambar Cat & Tinta]"
-                                class="mx-auto rounded-full h-16 w-16 md:h-20 md:w-20 object-cover mb-3 border-4 border-transparent group-hover:border-gray-500">
-                            <h3 class="font-semibold text-sm md:text-base">Cat & Tinta</h3>
-                        </div>
-                    </a>
-                    <!-- Card 6: Boiler & Limbah -->
-                    <a href="#produk" class="hero-category-link group" data-target="boiler">
-                        <div
-                            class="bg-white p-4 rounded-lg shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 h-full flex flex-col justify-center items-center">
-                            <img src="https://iqbyisyrzrcatqkxoflk.supabase.co/storage/v1/object/sign/categories/photo-1564605504543-1833fef7c1c9.avif?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV80MGI4NGQzNS1kZjc4LTRkY2EtOTUzMC03MmE5NTgzMzAyMTQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJjYXRlZ29yaWVzL3Bob3RvLTE1NjQ2MDU1MDQ1NDMtMTgzM2ZlZjdjMWM5LmF2aWYiLCJpYXQiOjE3NTE0NDU4MTAsImV4cCI6MTc4Mjk4MTgxMH0.ppmOreo0JOH1iEVkFuxzLD2GX-fRSfEOGADxKj3zcNE"
-                                alt="[Gambar Boiler & Limbah]"
-                                class="mx-auto rounded-full h-16 w-16 md:h-20 md:w-20 object-cover mb-3 border-4 border-transparent group-hover:border-blue-700">
-                            <h3 class="font-semibold text-sm md:text-base">Boiler & Limbah</h3>
-                        </div>
-                    </a>
-                    <!-- Card 7: Plastik & Pipa -->
-                    <a href="#produk" class="hero-category-link group" data-target="plastik">
-                        <div
-                            class="bg-white p-4 rounded-lg shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 h-full flex flex-col justify-center items-center">
-                            <img src="https://iqbyisyrzrcatqkxoflk.supabase.co/storage/v1/object/sign/categories/premium_photo-1675864662207-5813e38b0734.avif?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV80MGI4NGQzNS1kZjc4LTRkY2EtOTUzMC03MmE5NTgzMzAyMTQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJjYXRlZ29yaWVzL3ByZW1pdW1fcGhvdG8tMTY3NTg2NDY2MjIwNy01ODEzZTM4YjA3MzQuYXZpZiIsImlhdCI6MTc1MTQ0NTkyNiwiZXhwIjoxNzgyOTgxOTI2fQ.J3U09cbenz23RSVHoRsJrFmzONw2sJRFsqNAsRWCP7k"
-                                alt="[Gambar Plastik & Pipa]"
-                                class="mx-auto rounded-full h-16 w-16 md:h-20 md:w-20 object-cover mb-3 border-4 border-transparent group-hover:border-purple-500">
-                            <h3 class="font-semibold text-sm md:text-base">Plastik & Pipa</h3>
-                        </div>
-                    </a>
-                    <!-- Card 8: Oil & Gas -->
-                    <a href="#produk" class="hero-category-link group" data-target="oilgas">
-                        <div
-                            class="bg-white p-4 rounded-lg shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 h-full flex flex-col justify-center items-center">
-                            <img src="https://iqbyisyrzrcatqkxoflk.supabase.co/storage/v1/object/sign/categories/photo-1690508313456-bf8c851e8319.avif?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV80MGI4NGQzNS1kZjc4LTRkY2EtOTUzMC03MmE5NTgzMzAyMTQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJjYXRlZ29yaWVzL3Bob3RvLTE2OTA1MDgzMTM0NTYtYmY4Yzg1MWU4MzE5LmF2aWYiLCJpYXQiOjE3NTE0NDU4ODcsImV4cCI6MTc4Mjk4MTg4N30.4o0Vs_OL1P-o7LKkqRsIpXN4dotQbmsLaKvDP6mgkqw"
-                                alt="[Gambar Minyak & Gas]"
-                                class="mx-auto rounded-full h-16 w-16 md:h-20 md:w-20 object-cover mb-3 border-4 border-transparent group-hover:border-gray-700">
-                            <h3 class="font-semibold text-sm md:text-base">Oil & Gas</h3>
-                        </div>
-                    </a>
+                    <a href="#produk" class="hero-category-link group" data-target="kosmetik"><div class="bg-white p-4 rounded-lg shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 h-full flex flex-col justify-center items-center"><img src="https://iqbyisyrzrcatqkxoflk.supabase.co/storage/v1/object/sign/categories/premium_photo-1674739375749-7efe56fc8bbb.avif?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV8xNWQ2ZWE1Yy1hNzRkLTRlZDEtYTExNC0zODZkZDk0N2Y4N2EiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJjYXRlZ29yaWVzL3ByZW1pdW1fcGhvdG8tMTY3NDczOTM3NTc0OS03ZWZlNTZmYzhiYmIuYXZpZiIsImlhdCI6MTc1NDg0NjEwMCwiZXhwIjoxNzg2MzgyMTAwfQ.56WHdV-3YjvsID1c47NHCN0EjrZKAw7ncNNANZbIcvs" alt="[Gambar Kosmetik]" class="mx-auto rounded-full h-16 w-16 md:h-20 md:w-20 object-cover mb-3 border-4 border-transparent group-hover:border-blue-500"><h3 class="font-semibold text-sm md:text-base text-gray-800">Kosmetik</h3></div></a>
+                    <a href="#produk" class="hero-category-link group" data-target="rumahtangga"><div class="bg-white p-4 rounded-lg shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 h-full flex flex-col justify-center items-center"><img src="https://iqbyisyrzrcatqkxoflk.supabase.co/storage/v1/object/sign/categories/premium_photo-1664910556213-4395ebca30c2.avif?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV8xNWQ2ZWE1Yy1hNzRkLTRlZDEtYTExNC0zODZkZDk0N2Y4N2EiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJjYXRlZ29yaWVzL3ByZW1pdW1fcGhvdG8tMTY2NDkxMDU1NjIxMy00Mzk1ZWJjYTMwYzIuYXZpZiIsImlhdCI6MTc1NDg0NjEyMSwiZXhwIjoxNzg2MzgyMTIxfQ.4Cc61BU3qgh3x_PLwAiNcgTypTP57WZ3AvNyJxNOSfg" alt="[Gambar Produk Rumah Tangga]" class="mx-auto rounded-full h-16 w-16 md:h-20 md:w-20 object-cover mb-3 border-4 border-transparent group-hover:border-green-500"><h3 class="font-semibold text-sm md:text-base text-gray-800">Rumah Tangga</h3></div></a>
+                    <a href="#produk" class="hero-category-link group" data-target="kendaraan"><div class="bg-white p-4 rounded-lg shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 h-full flex flex-col justify-center items-center"><img src="https://iqbyisyrzrcatqkxoflk.supabase.co/storage/v1/object/sign/categories/premium_photo-1698080249116-de37e81e568e.avif?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV8xNWQ2ZWE1Yy1hNzRkLTRlZDEtYTExNC0zODZkZDk0N2Y4N2EiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJjYXRlZ29yaWVzL3ByZW1pdW1fcGhvdG8tMTY5ODA4MDI0OTExNi1kZTM3ZTgxZTU2OGUuYXZpZiIsImlhdCI6MTc1NDg0NjA3OCwiZXhwIjoxNzg2MzgyMDc4fQ.T3Q8PMHKS-Y4curz1IHXdFWilPWcInFGMLDhcb-Nyv4" alt="[Gambar Perawatan Kendaraan]" class="mx-auto rounded-full h-16 w-16 md:h-20 md:w-20 object-cover mb-3 border-4 border-transparent group-hover:border-amber-500"><h3 class="font-semibold text-sm md:text-base text-gray-800">Kendaraan</h3></div></a>
+                    <a href="#produk" class="hero-category-link group" data-target="makanan"><div class="bg-white p-4 rounded-lg shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 h-full flex flex-col justify-center items-center"><img src="https://iqbyisyrzrcatqkxoflk.supabase.co/storage/v1/object/sign/categories/photo-1645387492367-80c5841894fb.avif?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV8xNWQ2ZWE1Yy1hNzRkLTRlZDEtYTExNC0zODZkZDk0N2Y4N2EiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJjYXRlZ29yaWVzL3Bob3RvLTE2NDUzODc0OTIzNjctODBjNTg0MTg5NGZiLmF2aWYiLCJpYXQiOjE3NTQ4NDYxNDUsImV4cCI6MTc4NjM4MjE0NX0.MkjY4Dibmsy96q-DD-j6HAfswmBbCTjivj0VtIiavng" alt="[Gambar Makanan & Minuman]" class="mx-auto rounded-full h-16 w-16 md:h-20 md:w-20 object-cover mb-3 border-4 border-transparent group-hover:border-red-500"><h3 class="font-semibold text-sm md:text-base text-gray-800">Makanan & Minuman</h3></div></a>
+                    <a href="#produk" class="hero-category-link group" data-target="cat"><div class="bg-white p-4 rounded-lg shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 h-full flex flex-col justify-center items-center"><img src="https://iqbyisyrzrcatqkxoflk.supabase.co/storage/v1/object/sign/categories/premium_photo-1682142455929-cfdbbf6d7f4e.avif?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV8xNWQ2ZWE1Yy1hNzRkLTRlZDEtYTExNC0zODZkZDk0N2Y4N2EiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJjYXRlZ29yaWVzL3ByZW1pdW1fcGhvdG8tMTY4MjE0MjQ1NTkyOS1jZmRiYmY2ZDdmNGUuYXZpZiIsImlhdCI6MTc1NDg0NjA1OCwiZXhwIjoxNzg2MzgyMDU4fQ.USelhzFgXuj4SLwL37PSHTB1LPvPMG9VkxNcJZnCOy4" alt="[Gambar Cat & Tinta]" class="mx-auto rounded-full h-16 w-16 md:h-20 md:w-20 object-cover mb-3 border-4 border-transparent group-hover:border-gray-500"><h3 class="font-semibold text-sm md:text-base text-gray-800">Cat & Tinta</h3></div></a>
+                    <a href="#produk" class="hero-category-link group" data-target="boiler"><div class="bg-white p-4 rounded-lg shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 h-full flex flex-col justify-center items-center"><img src="https://iqbyisyrzrcatqkxoflk.supabase.co/storage/v1/object/sign/categories/photo-1564605504543-1833fef7c1c9.avif?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV8xNWQ2ZWE1Yy1hNzRkLTRlZDEtYTExNC0zODZkZDk0N2Y4N2EiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJjYXRlZ29yaWVzL3Bob3RvLTE1NjQ2MDU1MDQ1NDMtMTgzM2ZlZjdjMWM5LmF2aWYiLCJpYXQiOjE3NTQ4NDYxNzAsImV4cCI6MTc4NjM4MjE3MH0.DPlCjK6OUjaEXIiirjMEiBQ7R4NOPicj-r-2lQpidiY" alt="[Gambar Boiler & Limbah]" class="mx-auto rounded-full h-16 w-16 md:h-20 md:w-20 object-cover mb-3 border-4 border-transparent group-hover:border-blue-700"><h3 class="font-semibold text-sm md:text-base text-gray-800">Boiler & Limbah</h3></div></a>
+                    <a href="#produk" class="hero-category-link group" data-target="plastik"><div class="bg-white p-4 rounded-lg shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 h-full flex flex-col justify-center items-center"><img src="https://iqbyisyrzrcatqkxoflk.supabase.co/storage/v1/object/sign/categories/premium_photo-1675864662207-5813e38b0734.avif?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV8xNWQ2ZWE1Yy1hNzRkLTRlZDEtYTExNC0zODZkZDk0N2Y4N2EiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJjYXRlZ29yaWVzL3ByZW1pdW1fcGhvdG8tMTY3NTg2NDY2MjIwNy01ODEzZTM4YjA3MzQuYXZpZiIsImlhdCI6MTc1NDg0NjAzMiwiZXhwIjoxNzg2MzgyMDMyfQ.JEj5rkjpGElF4vUXLUhmZiNsky6nISuCHRuooc7bqLc" alt="[Gambar Plastik & Pipa]" class="mx-auto rounded-full h-16 w-16 md:h-20 md:w-20 object-cover mb-3 border-4 border-transparent group-hover:border-purple-500"><h3 class="font-semibold text-sm md:text-base text-gray-800">Plastik & Pipa</h3></div></a>
+                    <a href="#produk" class="hero-category-link group" data-target="oilgas"><div class="bg-white p-4 rounded-lg shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 h-full flex flex-col justify-center items-center"><img src="https://iqbyisyrzrcatqkxoflk.supabase.co/storage/v1/object/sign/categories/photo-1690508313456-bf8c851e8319.avif?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV8xNWQ2ZWE1Yy1hNzRkLTRlZDEtYTExNC0zODZkZDk0N2Y4N2EiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJjYXRlZ29yaWVzL3Bob3RvLTE2OTA1MDgzMTM0NTYtYmY4Yzg1MWU4MzE5LmF2aWYiLCJpYXQiOjE3NTQ4NDU5NzAsImV4cCI6MTc4NjM4MTk3MH0.I8zoyAnA-MDgUR6zsYJfU8dt6s1Cy11bMPrEX1ypqJU" alt="[Gambar Minyak & Gas]" class="mx-auto rounded-full h-16 w-16 md:h-20 md:w-20 object-cover mb-3 border-4 border-transparent group-hover:border-gray-700"><h3 class="font-semibold text-sm md:text-base text-gray-800">Oil & Gas</h3></div></a>
                 </div>
             </div>
         </section>
-
-        <!-- Tentang Kami, Layanan, Produk Sections -->
-        <section id="tentang" class="py-20 bg-white">
-            <div class="container mx-auto px-6">
-                <div class="max-w-4xl mx-auto text-center">
-                    <h2 class="text-3xl font-bold text-gray-800 mb-4">Tentang SANMIN GLOBE</h2>
-                    <div class="w-24 h-1 bg-blue-600 mx-auto mb-6"></div>
-                    <p class="text-lg text-gray-600 leading-relaxed">PT. SARANA MITRA INTI GLOBAL atau SANMIN GLOBE
-                        adalah Perusahaan yang berbentuk badan hukum, berlokasi di Jakarta Barat dengan pengalaman lebih
-                        dari 15 tahun. Kami berkomitmen untuk menyediakan produk dan layanan berkualitas tinggi di
-                        berbagai bidang aplikasi.</p>
-                </div>
-            </div>
-        </section>
-        <section id="layanan" class="py-20">
-            <div class="container mx-auto px-6">
-                <div class="text-center mb-12">
-                    <h2 class="text-3xl font-bold text-gray-800 mb-4">Layanan Unggulan Kami</h2>
-                    <p class="text-gray-600 max-w-2xl mx-auto">Kami menyediakan layanan produksi, jasa maklon, serta
-                        distribusi mesin-mesin inovatif.</p>
-                </div>
-                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    <div class="bg-white p-8 rounded-lg shadow-sm border">
-                        <h3 class="text-xl font-bold text-blue-600 mb-3">PRODUKSI</h3>
-                        <ul class="space-y-2 text-gray-600 list-disc list-inside">
-                            <li>Silicon Emulsion</li>
-                            <li>Pelembut dan Pewangi Pakaian</li>
-                            <li>Oli untuk Pemotong Besi</li>
-                            <li>Gel Pembersih Tangan</li>
-                            <li>Pembersih Basa dan Asam</li>
-                            <li>Pembersih Tank</li>
-                        </ul>
-                    </div>
-                    <div class="bg-white p-8 rounded-lg shadow-sm border">
-                        <h3 class="text-xl font-bold text-blue-600 mb-3">JASA MAKLON</h3>
-                        <p class="text-gray-600">Kami menyediakan jasa maklon untuk produk-produk berikut:</p>
-                        <ul class="space-y-2 text-gray-600 list-disc list-inside mt-2">
-                            <li>Kosmetik</li>
-                            <li>Produk Rumah Tangga</li>
-                        </ul>
-                    </div>
-                    <div class="bg-white p-8 rounded-lg shadow-sm border">
-                        <h3 class="text-xl font-bold text-blue-600 mb-3">AGENT / DISTRIBUTOR</h3>
-                        <ul class="space-y-2 text-gray-600 list-disc list-inside">
-                            <li>Mesin Pengolah Air Sehat (ALKALI, ANTIOXIDANT, MICRO CLUSTER)</li>
-                            <li>OXYGENERATOR Portabel</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Produk Section -->
+        <section id="tentang" class="py-20 bg-white"><div class="container mx-auto px-6"><div class="max-w-4xl mx-auto text-center"><h2 class="text-3xl font-bold text-gray-800 mb-4">Tentang SANMIN GLOBE</h2><div class="w-24 h-1 bg-blue-600 mx-auto mb-6"></div><p class="text-lg text-gray-600 leading-relaxed">PT. SARANA MITRA INTI GLOBAL atau SANMIN GLOBE adalah Perusahaan yang berbentuk badan hukum, berlokasi di Jakarta Barat dengan pengalaman lebih dari 15 tahun. Kami berkomitmen untuk menyediakan produk dan layanan berkualitas tinggi di berbagai bidang aplikasi.</p></div></div></section>
+        <section id="layanan" class="py-20"><div class="container mx-auto px-6"><div class="text-center mb-12"><h2 class="text-3xl font-bold text-gray-800 mb-4">Layanan Unggulan Kami</h2><p class="text-gray-600 max-w-2xl mx-auto">Kami menyediakan layanan produksi, jasa maklon, serta distribusi mesin-mesin inovatif.</p></div><div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8"><div class="bg-white p-8 rounded-lg shadow-sm border"><h3 class="text-xl font-bold text-blue-600 mb-3">PRODUKSI</h3><ul class="space-y-2 text-gray-600 list-disc list-inside"><li>Silicon Emulsion</li><li>Pelembut dan Pewangi Pakaian</li><li>Oli untuk Pemotong Besi</li><li>Gel Pembersih Tangan</li><li>Pembersih Basa dan Asam</li><li>Pembersih Tank</li></ul></div><div class="bg-white p-8 rounded-lg shadow-sm border"><h3 class="text-xl font-bold text-blue-600 mb-3">JASA MAKLON</h3><p class="text-gray-600">Kami menyediakan jasa maklon untuk produk-produk berikut:</p><ul class="space-y-2 text-gray-600 list-disc list-inside mt-2"><li>Kosmetik</li><li>Produk Rumah Tangga</li></ul></div><div class="bg-white p-8 rounded-lg shadow-sm border"><h3 class="text-xl font-bold text-blue-600 mb-3">AGENT / DISTRIBUTOR</h3><ul class="space-y-2 text-gray-600 list-disc list-inside"><li>Mesin Pengolah Air Sehat (ALKALI, ANTIOXIDANT, MICRO CLUSTER)</li><li>OXYGENERATOR Portabel</li></ul></div></div></div></section>
         <section id="produk" class="py-20 bg-white">
             <div class="container mx-auto px-6">
-                <div class="text-center mb-12">
-                    <h2 class="text-3xl font-bold text-gray-800 mb-4">Perdagangan Bahan Kimia</h2>
-                    <p class="text-gray-600 max-w-2xl mx-auto">Jelajahi beragam pilihan bahan kimia kami atau gunakan
-                        pencarian untuk menemukan produk spesifik.</p>
-                </div>
-
-                <!-- Search Bar -->
-                <div class="mb-8 max-w-2xl mx-auto">
-                    <input type="text" id="product-search-input" placeholder="Cari nama produk..."
-                        class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-                </div>
-
-                <!-- Product Display Area -->
+                <div class="text-center mb-12"><h2 class="text-3xl font-bold text-gray-800 mb-4">Perdagangan Bahan Kimia</h2><p class="text-gray-600 max-w-2xl mx-auto">Jelajahi beragam pilihan bahan kimia kami atau gunakan pencarian untuk menemukan produk spesifik.</p></div>
+                <div class="mb-8 max-w-2xl mx-auto"><input type="text" id="product-search-input" placeholder="Cari nama produk..." class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"></div>
                 <div id="product-display-area">
-                    <!-- Tab Buttons (will be hidden during search) -->
                     <div id="tab-buttons-container" class="flex flex-wrap justify-center gap-2 mb-8">
-                        <button class="tab-btn active border border-gray-300 px-4 py-2 rounded-lg text-sm md:text-base"
-                            data-target="kosmetik">Kosmetik</button>
-                        <button class="tab-btn border border-gray-300 px-4 py-2 rounded-lg text-sm md:text-base"
-                            data-target="rumahtangga">Rumah Tangga</button>
-                        <button class="tab-btn border border-gray-300 px-4 py-2 rounded-lg text-sm md:text-base"
-                            data-target="kendaraan">Kendaraan</button>
-                        <button class="tab-btn border border-gray-300 px-4 py-2 rounded-lg text-sm md:text-base"
-                            data-target="makanan">Makanan & Minuman</button>
-                        <button class="tab-btn border border-gray-300 px-4 py-2 rounded-lg text-sm md:text-base"
-                            data-target="cat">Cat & Tinta</button>
-                        <button class="tab-btn border border-gray-300 px-4 py-2 rounded-lg text-sm md:text-base"
-                            data-target="boiler">Boiler & Limbah</button>
-                        <button class="tab-btn border border-gray-300 px-4 py-2 rounded-lg text-sm md:text-base"
-                            data-target="plastik">Plastik & Pipa</button>
-                        <button class="tab-btn border border-gray-300 px-4 py-2 rounded-lg text-sm md:text-base"
-                            data-target="oilgas">Oil & Gas</button>
+                        <button class="tab-btn active border border-gray-300 px-4 py-2 rounded-lg text-sm md:text-base" data-target="kosmetik">Kosmetik</button>
+                        <button class="tab-btn border border-gray-300 px-4 py-2 rounded-lg text-sm md:text-base" data-target="rumahtangga">Rumah Tangga</button>
+                        <button class="tab-btn border border-gray-300 px-4 py-2 rounded-lg text-sm md:text-base" data-target="kendaraan">Kendaraan</button>
+                        <button class="tab-btn border border-gray-300 px-4 py-2 rounded-lg text-sm md:text-base" data-target="makanan">Makanan & Minuman</button>
+                        <button class="tab-btn border border-gray-300 px-4 py-2 rounded-lg text-sm md:text-base" data-target="cat">Cat & Tinta</button>
+                        <button class="tab-btn border border-gray-300 px-4 py-2 rounded-lg text-sm md:text-base" data-target="boiler">Boiler & Limbah</button>
+                        <button class="tab-btn border border-gray-300 px-4 py-2 rounded-lg text-sm md:text-base" data-target="plastik">Plastik & Pipa</button>
+                        <button class="tab-btn border border-gray-300 px-4 py-2 rounded-lg text-sm md:text-base" data-target="oilgas">Oil & Gas</button>
                     </div>
-                    <!-- Tab Content (will be hidden during search) -->
                     <div id="tab-content-container" class="bg-gray-50 p-8 rounded-lg shadow-inner min-h-[250px]">
-                        <div id="kosmetik" class="tab-content active">
-                            <h3 class="text-2xl font-bold text-gray-700 mb-6">Kosmetik / Personal Care</h3>
-                            <ul id="kosmetik-list"
-                                class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 text-gray-600 loading-placeholder">
-                            </ul>
-                        </div>
-                        <div id="rumahtangga" class="tab-content">
-                            <h3 class="text-2xl font-bold text-gray-700 mb-6">Rumah Tangga & Perhotelan</h3>
-                            <ul id="rumahtangga-list"
-                                class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 text-gray-600 loading-placeholder">
-                            </ul>
-                        </div>
-                        <div id="kendaraan" class="tab-content">
-                            <h3 class="text-2xl font-bold text-gray-700 mb-6">Kendaraan (Car Care)</h3>
-                            <ul id="kendaraan-list"
-                                class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 text-gray-600 loading-placeholder">
-                            </ul>
-                        </div>
-                        <div id="makanan" class="tab-content">
-                            <h3 class="text-2xl font-bold text-gray-700 mb-6">Makanan & Minuman (Food & Beverages)</h3>
-                            <ul id="makanan-list"
-                                class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 text-gray-600 loading-placeholder">
-                            </ul>
-                        </div>
-                        <div id="cat" class="tab-content">
-                            <h3 class="text-2xl font-bold text-gray-700 mb-6">Cat & Tinta (Paint & Ink)</h3>
-                            <ul id="cat-list"
-                                class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 text-gray-600 loading-placeholder">
-                            </ul>
-                        </div>
-                        <div id="boiler" class="tab-content">
-                            <h3 class="text-2xl font-bold text-gray-700 mb-6">Perawatan Sirkulasi Limbah Cair & Boiler
-                            </h3>
-                            <ul id="boiler-list"
-                                class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 text-gray-600 loading-placeholder">
-                            </ul>
-                        </div>
-                        <div id="plastik" class="tab-content">
-                            <h3 class="text-2xl font-bold text-gray-700 mb-6">Plastik, Selang, Kabel, Pipa PVC</h3>
-                            <ul id="plastik-list"
-                                class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 text-gray-600 loading-placeholder">
-                            </ul>
-                        </div>
-                        <div id="oilgas" class="tab-content">
-                            <h3 class="text-2xl font-bold text-gray-700 mb-6">Minyak Pelumas & Gas (Oil Lubricants &
-                                Gas)</h3>
-                            <ul id="oilgas-list"
-                                class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 text-gray-600 loading-placeholder">
-                            </ul>
-                        </div>
+                        <div id="kosmetik" class="tab-content active"><h3 class="text-2xl font-bold text-gray-700 mb-6">Kosmetik / Personal Care</h3><ul id="kosmetik-list" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 text-gray-600 loading-placeholder"></ul></div>
+                        <div id="rumahtangga" class="tab-content"><h3 class="text-2xl font-bold text-gray-700 mb-6">Rumah Tangga & Perhotelan</h3><ul id="rumahtangga-list" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 text-gray-600 loading-placeholder"></ul></div>
+                        <div id="kendaraan" class="tab-content"><h3 class="text-2xl font-bold text-gray-700 mb-6">Kendaraan (Car Care)</h3><ul id="kendaraan-list" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 text-gray-600 loading-placeholder"></ul></div>
+                        <div id="makanan" class="tab-content"><h3 class="text-2xl font-bold text-gray-700 mb-6">Makanan & Minuman (Food & Beverages)</h3><ul id="makanan-list" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 text-gray-600 loading-placeholder"></ul></div>
+                        <div id="cat" class="tab-content"><h3 class="text-2xl font-bold text-gray-700 mb-6">Cat & Tinta (Paint & Ink)</h3><ul id="cat-list" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 text-gray-600 loading-placeholder"></ul></div>
+                        <div id="boiler" class="tab-content"><h3 class="text-2xl font-bold text-gray-700 mb-6">Perawatan Sirkulasi Limbah Cair & Boiler</h3><ul id="boiler-list" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 text-gray-600 loading-placeholder"></ul></div>
+                        <div id="plastik" class="tab-content"><h3 class="text-2xl font-bold text-gray-700 mb-6">Plastik, Selang, Kabel, Pipa PVC</h3><ul id="plastik-list" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 text-gray-600 loading-placeholder"></ul></div>
+                        <div id="oilgas" class="tab-content"><h3 class="text-2xl font-bold text-gray-700 mb-6">Minyak Pelumas & Gas (Oil Lubricants & Gas)</h3><ul id="oilgas-list" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 text-gray-600 loading-placeholder"></ul></div>
                     </div>
-                    <!-- Search Results Container (hidden by default) -->
-                    <div id="search-results-container" class="hidden">
-                        <h3 class="text-2xl font-bold text-gray-700 mb-6 text-center">Hasil Pencarian</h3>
-                        <ul id="search-results-list"
-                            class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 text-gray-600"></ul>
-                    </div>
+                    <div id="search-results-container" class="hidden"><h3 class="text-2xl font-bold text-gray-700 mb-6 text-center">Hasil Pencarian</h3><ul id="search-results-list" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 text-gray-600"></ul></div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="artikel" class="py-20">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl font-bold text-gray-800 mb-4">Artikel & Informasi</h2>
+                    <p class="text-gray-600 max-w-2xl mx-auto">Baca artikel terbaru kami untuk wawasan mendalam tentang produk dan aplikasi kimia.</p>
+                </div>
+                <div id="article-list" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Artikel akan dimuat di sini oleh JavaScript -->
+                    <p class="text-center col-span-full text-gray-500">Memuat artikel...</p>
                 </div>
             </div>
         </section>
 
-        <!-- Kontak Section -->
         <section id="kontak" class="bg-gray-800 text-white py-20">
             <div class="container mx-auto px-6">
-                <div class="text-center mb-12">
-                    <h2 class="text-3xl font-bold mb-4">Hubungi Kami</h2>
-                    <p class="text-gray-300 max-w-2xl mx-auto">Siap untuk berdiskusi mengenai kebutuhan Anda? Hubungi
-                        kami melalui informasi di bawah ini.</p>
-                </div>
+                <div class="text-center mb-12"><h2 class="text-3xl font-bold mb-4">Hubungi Kami</h2><p class="text-gray-300 max-w-2xl mx-auto">Ada pertanyaan atau butuh penawaran? Hubungi kami langsung melalui WhatsApp atau kunjungi lokasi kami.</p></div>
                 <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-10">
-                    <!-- Kolom Kiri: Info & Tombol WhatsApp -->
                     <div class="bg-gray-700 p-8 rounded-lg flex flex-col justify-between">
                         <div>
                             <h3 class="text-2xl font-bold mb-6 text-white">Informasi Kontak</h3>
                             <div class="space-y-4">
-                                <div>
-                                    <h4 class="text-lg font-semibold text-blue-400">Alamat</h4>
-                                    <p class="text-gray-300">Blk. G, Ruko Golden Palm No.27, Pegadungan, Kec. Kalideres, Kota Jakarta Barat, Daerah Khusus Ibukota Jakarta 11830</p>
-                                </div>
+                                <div><h4 class="text-lg font-semibold text-blue-400">Alamat</h4><p class="text-gray-300">Blk. G, Ruko Golden Palm No.27, Pegadungan, Kec. Kalideres, Kota Jakarta Barat, Daerah Khusus Ibukota Jakarta 11830</p></div>
                                 <div>
                                     <h4 class="text-lg font-semibold text-blue-400">Email</h4>
                                     <p class="text-gray-300">michael@sanminglobe.com</p>
@@ -391,10 +181,7 @@
                                     <h4 class="text-lg font-semibold text-blue-400">Telepon</h4>
                                     <p class="text-gray-300">+62 858-9443-6642</p>
                                 </div>
-                                 <div>
-                                    <h4 class="text-lg font-semibold text-blue-400">Jam Operasional</h4>
-                                    <p class="text-gray-300">Senin - Jumat: 08:00 - 17:00</p>
-                                </div>
+                                 <div><h4 class="text-lg font-semibold text-blue-400">Jam Operasional</h4><p class="text-gray-300">Senin - Jumat: 08:00 - 17:00</p></div>
                             </div>
                         </div>
                         <a href="https://wa.me/6285894436642?text=Halo,%20saya%20tertarik%20dengan%20produk%20Anda." target="_blank" class="mt-8 w-full bg-green-500 text-white font-bold py-4 px-4 rounded-lg hover:bg-green-600 transition-colors flex items-center justify-center gap-3 text-lg">
@@ -402,7 +189,6 @@
                             Hubungi via WhatsApp
                         </a>
                     </div>
-                    <!-- Kolom Kanan: Peta Google Maps -->
                     <div class="rounded-lg overflow-hidden shadow-lg h-full min-h-[400px]">
                         <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3967.0604720465203!2d106.7002894!3d-6.1225638!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69f73f22d31c8f%3A0x4750404a43ed2b13!2sPT.%20SARANA%20MITRA%20INTI%20GLOBAL!5e0!3m2!1sen!2sid!4v1752173672736!5m2!1sen!2sid" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                     </div>
@@ -412,59 +198,43 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-gray-900 text-gray-400 py-8">
-        <div class="container mx-auto px-6 text-center">
-            <p>&copy; 2024 PT. SARANA MITRA INTI GLOBAL (SANMIN GLOBE). All Rights Reserved.</p>
-        </div>
-    </footer>
+    <footer class="bg-gray-900 text-gray-400 py-8"><div class="container mx-auto px-6 text-center"><p>&copy; 2024 PT. SARANA MITRA INTI GLOBAL (SANMIN GLOBE). All Rights Reserved.</p></div></footer>
 
-    <!-- Product Detail Modal -->
-    <div id="product-modal"
-        class="hidden fixed inset-0 bg-black bg-opacity-75 z-50 flex justify-center items-center p-4">
-        <div class="bg-white rounded-lg shadow-xl w-full max-w-2xl max-h-full overflow-y-auto">
-            <div class="p-6 md:p-8">
-                <div class="flex justify-between items-start">
-                    <h2 id="modal-product-name" class="text-2xl md:text-3xl font-bold text-gray-800">Nama Produk</h2>
-                    <button id="modal-close-btn"
-                        class="text-gray-500 hover:text-gray-800 text-3xl leading-none">&times;</button>
-                </div>
-                <hr class="my-4">
-                <img id="modal-product-image" src="" alt="[Gambar Produk]"
-                    class="w-full h-64 object-cover rounded-md mb-6 hidden">
-                <div id="modal-product-description" class="prose max-w-none text-gray-600">
-                    <p>Deskripsi produk akan muncul di sini.</p>
-                </div>
-            </div>
-        </div>
+    <!-- Modals -->
+    <div id="product-modal" class="hidden fixed inset-0 bg-black bg-opacity-75 z-50 flex justify-center items-center p-4">
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-2xl max-h-full overflow-y-auto"><div class="p-6 md:p-8"><div class="flex justify-between items-start"><h2 id="modal-product-name" class="text-2xl md:text-3xl font-bold text-gray-800">Nama Produk</h2><button id="modal-product-close-btn" class="text-gray-500 hover:text-gray-800 text-3xl leading-none">&times;</button></div><hr class="my-4"><img id="modal-product-image" src="" alt="[Gambar Produk]" class="w-full h-64 object-contain rounded-md mb-6 hidden"><div id="modal-product-description" class="prose max-w-none text-gray-600"><p>Deskripsi produk akan muncul di sini.</p></div></div></div>
     </div>
+    
+    <!-- Floating WhatsApp Button -->
+    <a href="https://wa.me/6285894436642?text=Halo,%20saya%20tertarik%20dengan%20produk%20Anda." target="_blank" class="fixed bottom-6 right-6 bg-green-500 text-white p-4 rounded-full shadow-lg hover:bg-green-600 transition-transform hover:scale-110 z-40">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.894 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 4.315 1.847 6.033l-1.05 3.856 3.897-1.023zm-1.023-7.297c-.147-.272-.282-.281-.401-.283-.117-.002-.252-.002-.37-.002s-.333.043-.502.221c-.17.179-.657.643-.657 1.57.0 1.128.673 1.834.765 1.956.092.122 1.32 2.159 3.216 2.82.433.152.79.242 1.09.308.422.091.787.075 1.087-.023.368-.12.82-.331.925-.625.105-.294.105-.55.075-.625s-.092-.122-.184-.214c-.092-.092-.21-.122-.303-.184-.093-.061-.21-.122-.303-.184-.093-.061-.21-.122-.303-.184s-.184-.092-.277-.153c-.092-.061-.21-.122-.303-.184-.093-.061-.21-.122-.303-.184s-.184-.092-.277-.153c-.092-.061-.21-.122-.303-.184-.093-.061-.21-.122-.303-.184-.093-.061-.21-.122-.303-.184s-.184-.092-.277-.153z"/></svg>
+    </a>
 
     <!-- Supabase and App Logic -->
     <script type="module">
         import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 
-        const SUPABASE_URL = 'https://iqbyisyrzrcatqkxoflk.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlxYnlpc3lyenJjYXRxa3hvZmxrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTEzNTY5MDQsImV4cCI6MjA2NjkzMjkwNH0.u49KBdYizMmZjBGrEvY4swAomHkNcAod-OoEfpm6uxs';
-
+        const SUPABASE_URL = 'https://iqbyisyrzrcatqkxoflk.supabase.co'; 
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlxYnlpc3lyenJjYXRxa3hvZmxrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTEzNTY5MDQsImV4cCI6MjA2NjkzMjkwNH0.u49KBdYizMmZjBGrEvY4swAomHkNcAod-OoEfpm6uxs'; 
+        
         let supabase;
-        let allProducts = []; // Store all products here
+        let allProducts = [];
+        let allArticles = [];
 
-        // Function to render a list of products into a target UL element
         function renderProducts(productList, targetElement) {
-            targetElement.innerHTML = ''; // Clear previous content
+            targetElement.innerHTML = '';
             if (productList.length === 0) {
-                if (targetElement.id === 'search-results-list') {
-                    targetElement.innerHTML = '<p class="text-center col-span-full">Tidak ada produk yang cocok dengan pencarian Anda.</p>';
+                 if (targetElement.id === 'search-results-list') {
+                    targetElement.innerHTML = '<p class="text-center col-span-full">Tidak ada produk yang cocok.</p>';
                 } else {
                     targetElement.parentElement.classList.add('empty-placeholder');
                 }
                 return;
             }
-
             productList.forEach(product => {
                 const listItem = document.createElement('li');
                 listItem.className = 'product-item bg-white rounded-lg p-4 shadow-sm border';
-                listItem.dataset.productId = product.id;
-
+                listItem.dataset.productId = product.id; 
                 let innerHTML = '';
                 if (product.image_url) {
                     innerHTML = `<div class="flex flex-col items-center text-center"><img src="${product.image_url}" alt="[Gambar ${product.name}]" class="h-24 w-24 object-cover rounded-md mb-2" onerror="this.style.display='none'"><span>${product.name}</span></div>`;
@@ -475,46 +245,33 @@
                 targetElement.appendChild(listItem);
             });
         }
-
+        
         async function loadProductsFromSupabase() {
             if (!supabase) return;
-            const { data: products, error } = await supabase.from('products').select('id, name, category, image_url, description');
-
+            const { data, error } = await supabase.from('products').select('id, name, category, image_url, description');
             if (error) {
                 console.error('Error fetching products:', error);
                 document.querySelectorAll('.loading-placeholder').forEach(el => el.classList.add('error-placeholder'));
                 return;
             }
-
-            allProducts = products || [];
-
-            document.querySelectorAll('.loading-placeholder').forEach(el => {
-                el.innerHTML = '';
-                el.classList.remove('loading-placeholder');
-            });
-
+            allProducts = data || [];
+            document.querySelectorAll('.loading-placeholder').forEach(el => el.classList.remove('loading-placeholder'));
             if (allProducts.length === 0) {
-                document.querySelectorAll('[id$="-list"]').forEach(list => list.parentElement.classList.add('empty-placeholder'));
+                 document.querySelectorAll('[id$="-list"]').forEach(list => list.parentElement.classList.add('empty-placeholder'));
                 return;
             }
-
             const productsByCategory = {};
             allProducts.forEach(p => {
-                // NEW LOGIC: Handle multiple categories
                 if (p.category && Array.isArray(p.category)) {
                     p.category.forEach(cat => {
                         const cleanCategory = cat.trim();
-                        if (!productsByCategory[cleanCategory]) {
-                            productsByCategory[cleanCategory] = [];
-                        }
-                        // Prevent duplicates in the same category list
+                        if(!productsByCategory[cleanCategory]) productsByCategory[cleanCategory] = [];
                         if (!productsByCategory[cleanCategory].some(prod => prod.id === p.id)) {
-                            productsByCategory[cleanCategory].push(p);
+                             productsByCategory[cleanCategory].push(p);
                         }
                     });
                 }
             });
-
             document.querySelectorAll('[id$="-list"]').forEach(listElement => {
                 const category = listElement.id.replace('-list', '');
                 const categoryProducts = productsByCategory[category] || [];
@@ -522,36 +279,75 @@
             });
         }
 
+        async function loadArticlesFromSupabase() {
+            if (!supabase) return;
+            const { data, error } = await supabase.from('articles').select('*').order('created_at', { ascending: false });
+            
+            if (error) {
+                console.error('Error fetching articles:', error);
+                document.getElementById('article-list').innerHTML = '<p class="text-center col-span-full text-red-500">Gagal memuat artikel. Periksa RLS di Supabase.</p>';
+                return;
+            }
+
+            allArticles = data || [];
+            const articleListContainer = document.getElementById('article-list');
+            articleListContainer.innerHTML = ''; // Clear loading text
+
+            if(allArticles.length === 0) {
+                articleListContainer.innerHTML = '<p class="text-center col-span-full text-gray-500">Belum ada artikel yang dipublikasikan.</p>';
+                return;
+            }
+            
+            allArticles.forEach(article => {
+                // Create an anchor tag instead of a div
+                const articleLink = document.createElement('a');
+                articleLink.href = `artikel.html?slug=${article.slug}`;
+                articleLink.className = 'article-card bg-white rounded-lg shadow-md overflow-hidden block'; // Use block to make the whole area clickable
+                
+                // Create a temporary div to parse the HTML content and get the text
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = article.content || '';
+                const textContent = tempDiv.textContent || tempDiv.innerText || '';
+                
+                const shortContent = textContent.split(' ').slice(0, 20).join(' ') + '...';
+
+                articleLink.innerHTML = `
+                    <img src="${article.featured_image_url || 'https://placehold.co/600x400/e2e8f0/475569?text=Artikel'}" alt="[Gambar] ${article.title}" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2 text-gray-800">${article.title}</h3>
+                        <p class="text-gray-600 mb-4">${shortContent}</p>
+                        <span class="text-blue-600 font-semibold hover:underline">Baca Selengkapnya &rarr;</span>
+                    </div>
+                `;
+                articleListContainer.appendChild(articleLink);
+            });
+        }
+        
         function openProductModal(productId) {
             const product = allProducts.find(p => p.id == productId);
             if (!product) return;
-
             const modal = document.getElementById('product-modal');
-            const modalName = document.getElementById('modal-product-name');
-            const modalImage = document.getElementById('modal-product-image');
-            const modalDescription = document.getElementById('modal-product-description');
-
-            modalName.textContent = product.name;
-            modalDescription.innerHTML = product.description ? product.description : '<p>Tidak ada deskripsi untuk produk ini.</p>';
-
+            modal.querySelector('#modal-product-name').textContent = product.name;
+            modal.querySelector('#modal-product-description').innerHTML = product.description ? product.description : '<p>Tidak ada deskripsi.</p>';
+            const img = modal.querySelector('#modal-product-image');
             if (product.image_url) {
-                modalImage.src = product.image_url;
-                modalImage.classList.remove('hidden');
+                img.src = product.image_url;
+                img.classList.remove('hidden');
             } else {
-                modalImage.classList.add('hidden');
+                img.classList.add('hidden');
             }
-
             modal.classList.remove('hidden');
         }
 
-        function closeProductModal() {
-            document.getElementById('product-modal').classList.add('hidden');
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.add('hidden');
         }
 
         document.addEventListener('DOMContentLoaded', () => {
             if (SUPABASE_URL !== 'YOUR_SUPABASE_URL' && SUPABASE_ANON_KEY !== 'YOUR_SUPABASE_ANON_KEY') {
                 supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
                 loadProductsFromSupabase();
+                loadArticlesFromSupabase();
             }
 
             // --- UI Logic ---
@@ -563,12 +359,10 @@
 
             searchInput.addEventListener('input', (e) => {
                 const query = e.target.value.trim().toLowerCase();
-
                 if (query) {
                     tabButtonsContainer.classList.add('hidden');
                     tabContentContainer.classList.add('hidden');
                     searchResultsContainer.classList.remove('hidden');
-
                     const filteredProducts = allProducts.filter(p => p.name.toLowerCase().includes(query));
                     renderProducts(filteredProducts, searchResultsList);
                 } else {
@@ -578,22 +372,15 @@
                 }
             });
 
-            const modal = document.getElementById('product-modal');
-            const modalCloseBtn = document.getElementById('modal-close-btn');
-
-            modalCloseBtn.addEventListener('click', closeProductModal);
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) {
-                    closeProductModal();
-                }
-            });
-
-            const productDisplayArea = document.getElementById('product-display-area');
-            productDisplayArea.addEventListener('click', (e) => {
+            // Modal listeners
+            document.getElementById('modal-product-close-btn').addEventListener('click', () => closeModal('product-modal'));
+            document.getElementById('product-modal').addEventListener('click', (e) => { if (e.target.id === 'product-modal') closeModal('product-modal'); });
+            
+            // Event delegation for opening product modal
+            document.body.addEventListener('click', (e) => {
                 const productItem = e.target.closest('.product-item');
                 if (productItem) {
-                    const productId = productItem.dataset.productId;
-                    openProductModal(productId);
+                    openProductModal(productItem.dataset.productId);
                 }
             });
 
@@ -611,22 +398,13 @@
                     document.getElementById(button.dataset.target).classList.add('active');
                 });
             });
-            const heroCategoryLinks = document.querySelectorAll('.hero-category-link');
-            heroCategoryLinks.forEach(link => {
-                link.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    const targetCategory = this.dataset.target;
-                    const targetTabButton = document.querySelector(`.tab-btn[data-target="${targetCategory}"]`);
-                    if (targetTabButton) targetTabButton.click();
-                    document.getElementById('produk').scrollIntoView({ behavior: 'smooth' });
-                });
-            });
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 anchor.addEventListener('click', function (e) {
-                    const targetSection = document.querySelector(this.getAttribute('href'));
-                    if (targetSection && !this.classList.contains('hero-category-link')) {
-                        e.preventDefault();
-                        targetSection.scrollIntoView({ behavior: 'smooth' });
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        targetElement.scrollIntoView({ behavior: 'smooth' });
                     }
                 });
             });
@@ -634,5 +412,4 @@
     </script>
 
 </body>
-
 </html>

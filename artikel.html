@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Judul halaman akan diisi oleh JavaScript -->
+    <title>Memuat Artikel... - SANMIN GLOBE</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .article-card {
+             transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .article-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+        /* Custom styles untuk konten artikel */
+        #article-content-main h4 {
+            font-weight: 600;
+            font-size: 1.25em;
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        #article-content-main table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 1em;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+        }
+        #article-content-main th, #article-content-main td {
+            border: 1px solid #e5e7eb;
+            padding: 12px;
+            text-align: left;
+        }
+        #article-content-main th {
+            background-color: #f9fafb;
+        }
+        #article-content-main ul {
+            list-style-type: disc;
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        #article-content-main ol {
+            list-style-type: decimal;
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        #article-content-main p {
+            margin-bottom: 1rem;
+            line-height: 1.75;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <!-- Header / Navigation Bar -->
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <nav class="container mx-auto px-6 py-3 flex justify-between items-center">
+            <a href="index.html" class="flex items-center">
+                <img src="https://iqbyisyrzrcatqkxoflk.supabase.co/storage/v1/object/sign/logo/logo.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV8xNWQ2ZWE1Yy1hNzRkLTRlZDEtYTExNC0zODZkZDk0N2Y4N2EiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJsb2dvL2xvZ28ucG5nIiwiaWF0IjoxNzU0ODQ2MjQwLCJleHAiOjE3ODYzODIyNDB9.Sk6MCzZO90aA42XH5ApYxQ8OQo5fEv27SHsq4eAxdLU" alt="Logo PT. Sarana Mitra Inti Global" class="h-12 w-auto">
+            </a>
+            <div class="hidden md:flex items-center space-x-6">
+                <a href="index.html#beranda" class="text-gray-600 hover:text-blue-600 transition-colors">Beranda</a>
+                <a href="index.html#tentang" class="text-gray-600 hover:text-blue-600 transition-colors">Tentang Kami</a>
+                <a href="index.html#produk" class="text-gray-600 hover:text-blue-600 transition-colors">Produk</a>
+                <a href="index.html#artikel" class="text-gray-600 hover:text-blue-600 transition-colors">Artikel</a>
+                <a href="index.html#kontak" class="text-gray-600 hover:text-blue-600 transition-colors">Kontak</a>
+            </div>
+            <a href="index.html#kontak" class="hidden md:block bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">Hubungi Kami</a>
+        </nav>
+    </header>
+
+    <main class="py-12 md:py-20">
+        <div class="container mx-auto px-6">
+            <article class="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-lg">
+                <div id="article-container">
+                    <!-- Judul Artikel -->
+                    <h1 id="article-title" class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Memuat Judul Artikel...</h1>
+                    <!-- Info Penulis & Tanggal -->
+                    <div class="text-gray-500 text-sm mb-6">
+                        <span id="article-author"></span>
+                        <span id="article-date"></span>
+                    </div>
+                    <!-- Gambar Utama Artikel -->
+                    <img id="article-image" src="" alt="" class="w-full h-auto max-h-96 object-cover rounded-md mb-8 hidden">
+                    <!-- Konten Artikel -->
+                    <div id="article-content-main" class="prose max-w-none text-gray-700">
+                        <p>Memuat konten artikel...</p>
+                    </div>
+                </div>
+                <div class="mt-12 border-t pt-6">
+                    <a href="index.html#artikel" class="text-blue-600 font-semibold hover:underline">&larr; Kembali ke Daftar Artikel</a>
+                </div>
+            </article>
+
+            <!-- Related Articles Section -->
+            <section id="related-articles" class="max-w-4xl mx-auto mt-16 md:mt-24">
+                <h3 class="text-2xl font-bold text-gray-800 mb-6 border-b pb-4">Baca Selanjutnya</h3>
+                <div id="related-articles-list" class="grid md:grid-cols-3 gap-8">
+                    <!-- Related articles will be loaded here -->
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-400 py-8 mt-20">
+        <div class="container mx-auto px-6 text-center">
+            <p>&copy; 2024 PT. SARANA MITRA INTI GLOBAL (SANMIN GLOBE). All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Supabase and App Logic -->
+    <script type="module">
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+
+        const SUPABASE_URL = 'https://iqbyisyrzrcatqkxoflk.supabase.co'; 
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlxYnlpc3lyenJjYXRxa3hvZmxrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTEzNTY5MDQsImV4cCI6MjA2NjkzMjkwNH0.u49KBdYizMmZjBGrEvY4swAomHkNcAod-OoEfpm6uxs'; 
+        
+        const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        async function loadRelatedArticles(currentArticleId) {
+            const { data, error } = await supabase
+                .from('articles')
+                .select('*')
+                .not('id', 'eq', currentArticleId) // Exclude the current article
+                .order('created_at', { ascending: false })
+                .limit(3); // Get 3 latest articles
+
+            if (error) {
+                console.error('Error fetching related articles:', error);
+                return;
+            }
+
+            const relatedListContainer = document.getElementById('related-articles-list');
+            relatedListContainer.innerHTML = ''; // Clear any previous content
+
+            if (data && data.length > 0) {
+                data.forEach(article => {
+                    const articleLink = document.createElement('a');
+                    articleLink.href = `artikel.html?slug=${article.slug}`;
+                    articleLink.className = 'article-card bg-white rounded-lg shadow-md overflow-hidden block';
+                    
+                    const tempDiv = document.createElement('div');
+                    tempDiv.innerHTML = article.content || '';
+                    const textContent = tempDiv.textContent || tempDiv.innerText || '';
+                    const shortContent = textContent.split(' ').slice(0, 15).join(' ') + '...';
+
+                    articleLink.innerHTML = `
+                        <img src="${article.featured_image_url || 'https://placehold.co/600x400/e2e8f0/475569?text=Artikel'}" alt="[Gambar] ${article.title}" class="w-full h-40 object-cover">
+                        <div class="p-4">
+                            <h3 class="text-lg font-bold mb-2 text-gray-800">${article.title}</h3>
+                            <p class="text-gray-600 text-sm">${shortContent}</p>
+                        </div>
+                    `;
+                    relatedListContainer.appendChild(articleLink);
+                });
+            }
+        }
+
+        async function loadSingleArticle() {
+            const params = new URLSearchParams(window.location.search);
+            const articleSlug = params.get('slug');
+
+            if (!articleSlug) {
+                document.getElementById('article-container').innerHTML = '<p class="text-red-500">Error: Artikel tidak ditemukan. Pastikan link Anda benar.</p>';
+                return;
+            }
+
+            const { data, error } = await supabase
+                .from('articles')
+                .select('*')
+                .eq('slug', articleSlug)
+                .single();
+
+            if (error || !data) {
+                console.error('Error fetching article:', error);
+                document.getElementById('article-title').textContent = 'Artikel Tidak Ditemukan';
+                document.getElementById('article-content-main').innerHTML = '<p>Maaf, artikel yang Anda cari tidak dapat ditemukan.</p>';
+                return;
+            }
+
+            // Populate the page with article data
+            document.title = `${data.title} - SANMIN GLOBE`;
+            document.getElementById('article-title').textContent = data.title;
+            
+            const authorEl = document.getElementById('article-author');
+            if (data.author) {
+                authorEl.textContent = `Oleh ${data.author} • `;
+            }
+
+            const dateEl = document.getElementById('article-date');
+            dateEl.textContent = `Dipublikasikan pada ${new Date(data.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}`;
+
+            const imageEl = document.getElementById('article-image');
+            if (data.featured_image_url) {
+                imageEl.src = data.featured_image_url;
+                imageEl.alt = `[Gambar] ${data.title}`;
+                imageEl.classList.remove('hidden');
+            }
+
+            document.getElementById('article-content-main').innerHTML = data.content;
+
+            // After loading the main article, load related articles
+            loadRelatedArticles(data.id);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadSingleArticle();
+        });
+    </script>
+</body>
+</html>
